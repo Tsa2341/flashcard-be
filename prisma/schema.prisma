@@ -1,0 +1,42 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model FlashCard {
+  id                Int                 @id @default(autoincrement())
+  createdAt         DateTime            @default(now())
+  question          String
+  answer            String
+  UserReadFlashcard UserReadFlashcard[]
+  author            User                @relation(name: "flashcardAuthor", fields: [authorId], references: [id])
+  authorId          Int
+}
+
+model User {
+  id                Int                 @id @default(autoincrement())
+  createdAt         DateTime            @default(now())
+  name              String
+  email             String
+  password          String
+  UserReadFlashcard UserReadFlashcard[]
+  FlashCard         FlashCard[]         @relation(name: "flashcardAuthor")
+}
+
+model UserReadFlashcard {
+  readAt      DateTime  @default(now())
+  user        User      @relation(fields: [userId], references: [id])
+  userId      Int
+  flashcard   FlashCard @relation(fields: [flashcardId], references: [id])
+  flashcardId Int
+  confidence  Int
+
+  @@id([userId, flashcardId])
+}
