@@ -1,4 +1,5 @@
 import * as jwt from 'jsonwebtoken';
+import * as bcrypt from 'bcryptjs';
 import { Request } from 'express';
 
 export interface AuthTokenPayload {
@@ -14,18 +15,20 @@ export function verifyToken(token: string): AuthTokenPayload {
 }
 
 export function decodeAuthHeader(req: Request): AuthTokenPayload | null {
-	let payload: AuthTokenPayload;
+	let payload: AuthTokenPayload | null = null;
 	const token = req.headers.authorization;
 
-	if (!token) {
-		throw new Error('Login to continue!!!!');
-	}
-
-	try {
-		payload = verifyToken(token);
-	} catch ({ message }) {
-		return null;
+	if (token) {
+		payload = verifyToken(token.split(' ')[1]);
 	}
 
 	return payload;
 }
+
+export const hashPassword = (password: string): string => {
+	return bcrypt.hashSync(password, 10);
+};
+
+export const verifyPassword = (password: string, hashedPassword: string): boolean => {
+	return bcrypt.compareSync(password, hashedPassword);
+};

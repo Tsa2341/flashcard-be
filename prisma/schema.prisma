@@ -11,26 +11,27 @@ datasource db {
 }
 
 model FlashCard {
-  id                Int                 @id @default(autoincrement())
-  createdAt         DateTime            @default(now())
-  question          String
-  answer            String
-  UserReadFlashcard UserReadFlashcard[]
-  author            User                @relation(name: "flashcardAuthor", fields: [authorId], references: [id])
-  authorId          Int
+  id        Int                 @id @default(autoincrement())
+  createdAt DateTime            @default(now())
+  question  String
+  answer    String
+  usersRead UserReadFlashcard[]
+  author    User                @relation(name: "flashcardAuthor", fields: [authorId], references: [id])
+  authorId  Int
 }
 
 model User {
   id                Int                 @id @default(autoincrement())
   createdAt         DateTime            @default(now())
   name              String
-  email             String
+  email             String              @unique
   password          String
-  UserReadFlashcard UserReadFlashcard[]
-  FlashCard         FlashCard[]         @relation(name: "flashcardAuthor")
+  flashcardsRead    UserReadFlashcard[]
+  flashcardsCreated FlashCard[]         @relation(name: "flashcardAuthor")
 }
 
 model UserReadFlashcard {
+  id          Int       @id @default(autoincrement())
   readAt      DateTime  @default(now())
   user        User      @relation(fields: [userId], references: [id])
   userId      Int
@@ -38,5 +39,5 @@ model UserReadFlashcard {
   flashcardId Int
   confidence  Int
 
-  @@id([userId, flashcardId])
+  @@unique([userId, flashcardId])
 }

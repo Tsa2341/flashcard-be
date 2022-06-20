@@ -2,11 +2,68 @@
 ### Do not make changes to this file directly
 
 
+type AuthResponse {
+  token: String!
+  user: User!
+}
+
 """
 A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar.
 """
 scalar DateTime
 
+type FindCard {
+  cards: [FlashCard!]!
+  count: Int!
+}
+
+type FlashCard {
+  answer: String!
+  author: User
+  createdAt: DateTime!
+  id: Int!
+  question: String!
+  usersRead: [UserReadFlashcard]
+}
+
+type Mutation {
+  createCard(answer: String!, question: String!): FlashCard!
+  deleteCard(id: Int!): FlashCard!
+  login(email: String!, password: String!): AuthResponse!
+  readCard(confidence: Int!, id: Int!): FlashCard!
+  signup(email: String!, name: String!, password: String!): AuthResponse!
+  updateCard(answer: String, id: Int!, question: String): FlashCard!
+}
+
 type Query {
-  ok: Boolean!
+  findCard(email: String, filter: String, id: Int, orderBy: [cardOrderByInput!], skip: Int, take: Int): FindCard
+}
+
+enum Sort {
+  asc
+  desc
+}
+
+type User {
+  createAt: DateTime!
+  email: String!
+  flashcardsCreated: [FlashCard!]!
+  flashcardsRead: [UserReadFlashcard!]!
+  id: Int!
+  name: String!
+}
+
+type UserReadFlashcard {
+  confidence: Int!
+  flashCard: FlashCard
+  id: Int!
+  readAt: DateTime!
+  user: User
+}
+
+input cardOrderByInput {
+  answer: Sort
+  createAt: Sort
+  id: Sort
+  question: Sort
 }
