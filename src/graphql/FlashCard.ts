@@ -41,7 +41,7 @@ export const cardOrderByInput = inputObjectType({
 		t.field('id', { type: Sort });
 		t.field('question', { type: Sort });
 		t.field('answer', { type: Sort });
-		t.field('createAt', { type: Sort });
+		t.field('createdAt', { type: Sort });
 	},
 });
 export const Sort = enumType({

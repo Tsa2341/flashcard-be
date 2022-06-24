@@ -63,7 +63,7 @@ type UserReadFlashcard {
 
 input cardOrderByInput {
   answer: Sort
-  createAt: Sort
+  createdAt: Sort
   id: Sort
   question: Sort
 }

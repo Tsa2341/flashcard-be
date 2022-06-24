@@ -22,13 +22,20 @@ CREATE TABLE "User" (
 
 -- CreateTable
 CREATE TABLE "UserReadFlashcard" (
+    "id" SERIAL NOT NULL,
     "readAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "userId" INTEGER NOT NULL,
     "flashcardId" INTEGER NOT NULL,
     "confidence" INTEGER NOT NULL,
 
-    CONSTRAINT "UserReadFlashcard_pkey" PRIMARY KEY ("userId","flashcardId")
+    CONSTRAINT "UserReadFlashcard_pkey" PRIMARY KEY ("id")
 );
+
+-- CreateIndex
+CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "UserReadFlashcard_userId_flashcardId_key" ON "UserReadFlashcard"("userId", "flashcardId");
 
 -- AddForeignKey
 ALTER TABLE "FlashCard" ADD CONSTRAINT "FlashCard_authorId_fkey" FOREIGN KEY ("authorId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

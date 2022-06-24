@@ -31,7 +31,7 @@ declare global {
 export interface NexusGenInputs {
   cardOrderByInput: { // input type
     answer?: NexusGenEnums['Sort'] | null; // Sort
-    createAt?: NexusGenEnums['Sort'] | null; // Sort
+    createdAt?: NexusGenEnums['Sort'] | null; // Sort
     id?: NexusGenEnums['Sort'] | null; // Sort
     question?: NexusGenEnums['Sort'] | null; // Sort
   }
